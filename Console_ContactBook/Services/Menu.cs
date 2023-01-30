@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Console_ContactBook.Services
 {
@@ -23,19 +24,33 @@ namespace Console_ContactBook.Services
             }
             catch { }
 
-            Console.WriteLine("Choose an option.");
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("---------------------------------------------");
             Console.WriteLine("1. Add contact.");
             Console.WriteLine("2. View all contacts.");
             Console.WriteLine("3. Search contact by name.");
             Console.WriteLine("4. Delete contact by name.");
-            Console.WriteLine("Press X to exit");
-
-
+            Console.WriteLine("Press x to exit");
+            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine(" ");
             Console.WriteLine("Choose one alternative from the menu: ");
+
             var option = Console.ReadLine();
 
-            
-           
+            while (true)
+            {
+                if (option == "1" || option == "2" || option == "3" || option == "4" || option == "X")
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine("Invalid option. Press any key to return to menu.");
+                    Console.ReadKey();
+                    break;
+                }
+            }
 
             switch (option)
             {
@@ -54,10 +69,11 @@ namespace Console_ContactBook.Services
                     OptionFour();
                     break;
 
-                case "X":
+                    //hur får jag till detta? Har provat alla möjliga kombinationer. 
+                case "x":
+                    Environment.Exit(0);
                     break;
             }
-
         }
 
         private void OptionOne()
@@ -65,11 +81,10 @@ namespace Console_ContactBook.Services
 
             Console.Clear();
             Console.WriteLine("Add a new contact");
-
+            Console.WriteLine("---------------------------------------------");
 
             Contact contact = new Contact();
             
-
             Console.Write("Ange förnamn: ");
             contact.FirstName = Console.ReadLine() ?? "";
 
@@ -93,46 +108,81 @@ namespace Console_ContactBook.Services
         private void OptionTwo()
         {
             Console.Clear();
-            Console.WriteLine("View all contacts");
+            Console.WriteLine("All contacts");
+             Console.WriteLine("---------------------------------------------");
             Console.WriteLine("");
 
             contacts!.ForEach(contact => Console.WriteLine("Namn: " + contact.FirstName + " " + contact.LastName + "   " + "Email: " + contact.Email));
             Console.WriteLine("");
-            Console.WriteLine("Press any key to get to the startpage.");
-            Console.ReadKey();
-            
+            OptionReturn();
+
         }
 
         private void OptionThree()
         {
             Console.Clear();
             Console.WriteLine("Search for a contact by name");
+             Console.WriteLine("---------------------------------------------");
             Console.Write("Enter a name: ");
             var searchName = Console.ReadLine();
 
             var contact = contacts.Where(c => c.FirstName.Contains(searchName, StringComparison.OrdinalIgnoreCase) || c.LastName.Contains(searchName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
             if (contact != null)
             {
-                Console.WriteLine("Name: " + contact.FirstName + " " + contact.LastName);
-                Console.WriteLine("Address: " + contact.Address);
-                Console.WriteLine("Phone: " + contact.Phone);
-                Console.WriteLine("Email: " + contact.Email);
+               DisplayContactDetails(contact);
+               OptionReturn();
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Contact not found.");
+                OptionReturn();
+            }
+        }
+
+        private void OptionFour()
+        {
+            Console.Clear();
+            Console.WriteLine("Enter name of the contact you want to delete: ");
+            Console.WriteLine("---------------------------------------------");
+            var searchName = Console.ReadLine();
+
+            var contact = contacts.Where(c => c.FirstName.Contains(searchName, StringComparison.OrdinalIgnoreCase) || c.LastName.Contains(searchName, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
+
+            if (contact != null)
+            {
+                contacts.Remove(contact);
+                file.Save(FilePath, JsonConvert.SerializeObject(contacts));
+                Console.WriteLine(" ");
+                Console.WriteLine("Contact deleted.");
+                OptionReturn();
             }
             else
             {
                 Console.WriteLine("Contact not found.");
+                OptionReturn();
             }
         }
 
-
-
-
-        private void OptionFour()
+        private void DisplayContactDetails(Contact contact)
         {
-
+            Console.Clear();
+            Console.WriteLine("Contact information: ");
+             Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("Name: " + contact.FirstName + " " + contact.LastName);
+            Console.WriteLine("Address: " + contact.Address);
+            Console.WriteLine("Phone: " + contact.Phone);
+            Console.WriteLine("Email: " + contact.Email);
+             Console.WriteLine("---------------------------------------------");
+         
         }
 
+        private void OptionReturn()
+        {
+            Console.WriteLine(" ");
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
 
     }
 }
-
