@@ -39,7 +39,7 @@ namespace Console_ContactBook.Services
 
             while (true)
             {
-                if (option == "1" || option == "2" || option == "3" || option == "4" || option == "X")
+                if (option == "1" || option == "2" || option == "3" || option == "4" || option == "x")
                 {
                     break;
                 }
@@ -69,7 +69,6 @@ namespace Console_ContactBook.Services
                     OptionFour();
                     break;
 
-                    //hur får jag till detta? Har provat alla möjliga kombinationer. 
                 case "x":
                     Environment.Exit(0);
                     break;
