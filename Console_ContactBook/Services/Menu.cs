@@ -1,15 +1,9 @@
 ﻿using Console_ContactBook.Models;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Console_ContactBook.Services
 {
-    internal class Menu
+    public class Menu
     {
         private List<Contact> contacts = new List<Contact>();
         private FileService file = new FileService();
