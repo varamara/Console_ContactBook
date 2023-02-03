@@ -13,7 +13,7 @@ internal interface IContact
 
 
 }
-internal class Contact : IContact
+public class Contact : IContact
 {
  
     public Guid Id { get; set; } = Guid.NewGuid();

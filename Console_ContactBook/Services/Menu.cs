@@ -5,7 +5,7 @@ namespace Console_ContactBook.Services
 {
     public class Menu
     {
-        private List<Contact> contacts = new List<Contact>();
+        public List<Contact> contacts = new List<Contact>();
         private FileService file = new FileService();
 
         public string FilePath { get; set; } = null!;
@@ -18,7 +18,7 @@ namespace Console_ContactBook.Services
             }
             catch { }
 
-            Console.WriteLine("Choose an option:");
+            Console.WriteLine("CONTACT BOOK");
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine("1. Add contact.");
             Console.WriteLine("2. View all contacts.");
@@ -71,45 +71,56 @@ namespace Console_ContactBook.Services
 
         private void OptionOne()
         {
-
             Console.Clear();
             Console.WriteLine("Add a new contact");
             Console.WriteLine("---------------------------------------------");
 
             Contact contact = new Contact();
             
-            Console.Write("Ange förnamn: ");
+            Console.Write("Enter Firstname: ");
             contact.FirstName = Console.ReadLine() ?? "";
 
-            Console.Write("Ange efternamn: ");
+            Console.Write("Enter Lastname: ");
             contact.LastName = Console.ReadLine() ?? "";
 
-            Console.Write("Ange adress: ");
+            Console.Write("Enter Home Address: ");
             contact.Address = Console.ReadLine() ?? "";
 
-            Console.Write("Ange telefonnummer: ");
+            Console.Write("Enter Phone Number: ");
             contact.Phone = Console.ReadLine() ?? "";
 
-            Console.Write("Ange E-postadress:");
+            Console.Write("Enter e-mail Address:");
             contact.Email = Console.ReadLine() ?? "";
 
             contacts.Add(contact);
             file.Save(FilePath, JsonConvert.SerializeObject( contacts ));
- 
         }
 
         private void OptionTwo()
         {
             Console.Clear();
             Console.WriteLine("All contacts");
-             Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("");
+            Console.WriteLine("---------------------------------------------");
 
-            contacts!.ForEach(contact => Console.WriteLine("Namn: " + contact.FirstName + " " + contact.LastName + "   " + "Email: " + contact.Email));
-            Console.WriteLine("");
+            if (contacts == null || !contacts.Any())
+            {
+                Console.WriteLine(" ");
+                Console.WriteLine("There are no contacts to display.");
+                OptionReturn();
+                return;
+            }
+
+            contacts.ForEach(contact =>
+            {
+                Console.WriteLine("Name: " + contact.FirstName + " " + contact.LastName);
+                Console.WriteLine("Home Address: " + contact.Address);
+                Console.WriteLine("Phone Number: " + contact.Phone);
+                Console.WriteLine("E-mail Address: " + contact.Email);
+                Console.WriteLine("---------------------------------------------");
+            });
             OptionReturn();
-
         }
+
 
         private void OptionThree()
         {
@@ -144,6 +155,7 @@ namespace Console_ContactBook.Services
 
             if (contact != null)
             {
+                DisplayContactDetails(contact);
                 contacts.Remove(contact);
                 file.Save(FilePath, JsonConvert.SerializeObject(contacts));
                 Console.WriteLine(" ");
@@ -161,12 +173,12 @@ namespace Console_ContactBook.Services
         {
             Console.Clear();
             Console.WriteLine("Contact information: ");
-             Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("---------------------------------------------");
             Console.WriteLine("Name: " + contact.FirstName + " " + contact.LastName);
             Console.WriteLine("Address: " + contact.Address);
             Console.WriteLine("Phone: " + contact.Phone);
             Console.WriteLine("Email: " + contact.Email);
-             Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("---------------------------------------------");
          
         }
 
@@ -176,6 +188,5 @@ namespace Console_ContactBook.Services
             Console.WriteLine("Press any key to continue.");
             Console.ReadKey();
         }
-
     }
 }

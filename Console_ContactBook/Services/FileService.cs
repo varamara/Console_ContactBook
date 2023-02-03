@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Console_ContactBook.Services
 {
-    internal class FileService
+    public class FileService
     {
+        public string FilePath { get; set; } = string.Empty;
+
+
         public void Save(string filePath, string content)
         {
             using var sw = new StreamWriter(filePath);
